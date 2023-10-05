@@ -54,7 +54,7 @@ public class SMSRunner {
                                 case 1: //Register the courses
                                     Course nRegisterCourse= runner.getRegisterCourseChoice();
                                     //Now call register function
-                                    
+
                                     break;
                                 case 2: //logout
                                     break;
