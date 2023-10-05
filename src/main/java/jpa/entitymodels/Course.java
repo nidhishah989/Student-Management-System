@@ -48,4 +48,11 @@ public class Course {
     public void setcInstructorName(String cInstructorName) {
         this.cInstructorName = cInstructorName;
     }
+
+    @Override
+    public String toString() {
+        return "|" + cid +
+                "|" + cName +
+                "|" + cInstructorName +"|";
+    }
 }
