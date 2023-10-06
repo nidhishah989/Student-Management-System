@@ -1,5 +1,6 @@
 package jpa.service;
 
+import jpa.dao.CourseDAO;
 import jpa.dao.StudentDAO;
 import jpa.entitymodels.Course;
 import jpa.entitymodels.Student;
@@ -64,20 +65,35 @@ public class StudentService implements StudentDAO {
     @Override
     public void registerStudentToCourse(String email, int cid) {
       try{
-          //get student
+          Course newCourse;
+          List<Course> rgisteredCourses = null;
+          //get student registered courses
           Student student = getStudentByEmail(email);
-          //check student already register or not
+          rgisteredCourses = student.geteCourses();
+          //check student already register given course or not
           if(student!=null && !student.geteCourses().isEmpty()){
               for(Course course:student.geteCourses()){
                   if (course.getCid()==cid){throw new Exception("You are already registered in that course!");}
               }
           }
           // Register the course for student
+          //get course from courseservice
+          CourseDAO cservice = new CourseService();
+          List<Course> avaialableCourses= cservice.getAllCourses();
+          for (Course acourse: avaialableCourses ){
+              if(acourse.getCid()==cid){
+                  rgisteredCourses.add(acourse);
+                  break;
+              }
+          }
           //add course in courselist in student entity
+          student.seteCourses(rgisteredCourses);
+          connectionfactory.getSession().merge(student);
+          connectionfactory.makeCommit();
           //call merge on student
       } catch (NoResultException ne){
           throw new NoResultException("Student is not present");
-      } catch(Exception e){
+      } catch (Exception e) {
           throw new RuntimeException(e.getMessage());
       }
     }

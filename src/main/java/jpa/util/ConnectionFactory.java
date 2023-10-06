@@ -28,8 +28,12 @@ public enum ConnectionFactory {
         return session;
     }
 
-    public void closeSession() {
+    public void makeCommit(){
         t.commit();
+    }
+
+    public void closeSession() {
+
         factory.close();
         session.close();
     }

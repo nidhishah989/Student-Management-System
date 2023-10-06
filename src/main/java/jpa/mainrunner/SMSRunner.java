@@ -50,15 +50,24 @@ public class SMSRunner {
                             System.out.println("---------------------------------");
                             runner.printStudentRegisterCourses(logininput.get(0));
                             //show second Menu
-                            switch (runner.SecondMenuSelection()){
-                                case 1: //Register the courses
-                                    Course nRegisterCourse= runner.getRegisterCourseChoice();
-                                    //Now call register function
+                            do {
+                                switch (runner.SecondMenuSelection()) {
+                                    case 1: //Register the courses
+                                        int nRegisterCourse = runner.getRegisterCourseChoice();
+                                        //Now call register function
+                                        try{
+                                            runner.stuservice.registerStudentToCourse(logininput.get(0), nRegisterCourse);
+                                            System.out.println("New list of Registered courses.");
+                                        }catch (RuntimeException re){
+                                            System.out.println(re.getMessage());
+                                        }
+                                        runner.printStudentRegisterCourses(logininput.get(0));
 
-                                    break;
-                                case 2: //logout
-                                    break;
-                            }
+                                        break;
+                                    case 2: //logout
+                                        break;
+                                }
+                            }while(runner.SecondMenuSelection()!=2);
 
                         }
 //                    }while(!userauthenticated);
@@ -147,7 +156,7 @@ public class SMSRunner {
         return choice;
     }
 
-    private Course getRegisterCourseChoice() {
+    private int getRegisterCourseChoice() {
         //show all courses
         cservice = new CourseService();
         List<Integer> courseIds =new ArrayList<Integer>();
@@ -163,11 +172,7 @@ public class SMSRunner {
             if(!courseIds.contains(selection)){System.out.println("Invalid Input.");}
         }while(!courseIds.contains(selection));
         //selection is done and good
-        for(Course course:courses){
-            if(course.getCid()==selection){
-                return course;
-            }
-        }
-        return null;
+
+        return selection;
     }
 }
