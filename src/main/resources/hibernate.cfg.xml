@@ -10,10 +10,10 @@
         <property name="connection.username"></property>
         <property name="connection.password"></property>
 
-        <property name="dialect">org.hibernate.dialect.MySQL8Dialect</property>
+<!--        <property name="dialect">org.hibernate.dialect.MySQL8Dialect</property>-->
 
-        <property name="hibernate.show_sql" >true </property>
-        <property name="hibernate.format_sql" >true </property>
+<!--        <property name="hibernate.show_sql" >true </property>-->
+<!--        <property name="hibernate.format_sql" >true </property>-->
 
         <!--     Mapping entity file -->
         <mapping class="jpa.entitymodels.Student"/>

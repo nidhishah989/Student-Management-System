@@ -3,9 +3,7 @@ package jpa.entitymodels;
 import javax.persistence.*;
 import java.util.List;
 @Entity
-//@NamedQueries({
-//        @NamedQuery(name="",query=""),
-//})
+@Table (name="Student")
 public class Student {
 
     public Student(){

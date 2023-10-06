@@ -13,7 +13,7 @@ public class CourseService implements CourseDAO {
     ConnectionFactory connectionfactory = ConnectionFactory.GET_SESSION.getInstance();
     @Override
     public List<Course> getAllCourses() {
-
+         //get all available courses
         try{
             TypedQuery<Course> typedQuery= connectionfactory.getSession()
                     .createQuery("FROM Course", Course.class);

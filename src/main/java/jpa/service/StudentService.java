@@ -5,6 +5,7 @@ import jpa.dao.StudentDAO;
 import jpa.entitymodels.Course;
 import jpa.entitymodels.Student;
 import jpa.util.ConnectionFactory;
+import org.hibernate.Transaction;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -16,7 +17,7 @@ public class StudentService implements StudentDAO {
 
     ConnectionFactory connectionfactory = ConnectionFactory.GET_SESSION.getInstance();
     @Override
-    public List<Student> getAllStudents() {
+    public List<Student> getAllStudents() { //get all students
         try{
             TypedQuery<Student> typedQuery= connectionfactory.getSession()
                     .createQuery("FROM Student", Student.class);
@@ -27,7 +28,7 @@ public class StudentService implements StudentDAO {
     }
 
     @Override
-    public Student getStudentByEmail(String email) {
+    public Student getStudentByEmail(String email) { //get student by email
         try{
             TypedQuery<Student> typedQuery= connectionfactory.getSession()
                     .createQuery("from Student where email =:email", Student.class);
@@ -42,6 +43,7 @@ public class StudentService implements StudentDAO {
 
     @Override
     public boolean validateStudent(String email, String password) {
+        //student authentication
         boolean authenticated=false;
         try{
             // check the email entry present or not
@@ -65,9 +67,8 @@ public class StudentService implements StudentDAO {
 
     @Override
     public void registerStudentToCourse(String email, int cid) {
+        //register course for authenticated user and check if already registered or not
       try{
-          Course newCourse;
-//          List<Course> rgisteredCourses;
           //get student registered courses
           Student student = getStudentByEmail(email);
           List<Course> rgisteredCourses = student.geteCourses();
@@ -91,20 +92,23 @@ public class StudentService implements StudentDAO {
                   break;
               }
           }
+          Transaction t = connectionfactory.getSession().beginTransaction();
           //add course in courselist in student entity
           student.seteCourses(rgisteredCourses);
           connectionfactory.getSession().merge(student);
-//          connectionfactory.makeCommit();
+          connectionfactory.makeCommit();
           //call merge on student
       } catch (NoResultException ne){
           throw new NoResultException("Student is not present");
       } catch (Exception e) {
           throw new RuntimeException(e.getMessage());
       }
+
     }
 
     @Override
     public List<Course> getStudentCourses(String email) {
+        // get all courses that are registered for authenticated user
         try{
             TypedQuery<Student> typedQuery= connectionfactory.getSession()
                     .createQuery("from Student where email =:email", Student.class);

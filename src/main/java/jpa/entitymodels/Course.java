@@ -3,6 +3,7 @@ package jpa.entitymodels;
 import javax.persistence.*;
 
 @Entity
+@Table(name="Course")
 public class Course {
     @Id
     @Column(name="id")
@@ -48,8 +49,10 @@ public class Course {
 
     @Override
     public String toString() {
-        return "|" + cid +
-                "|" + cName +
-                "|" + cInstructorName +"|";
+//        return "|" + cid +
+//                "|" + cName +
+//                "|" + cInstructorName +"|";
+//        System.out.printf("%-5s %-10s %-20s%n", "ID", "COURSE_NAME", "INSTRUCTOR_NAME");
+        return String.format("|%-5s|%-30s|%-20s|", cid, cName, cInstructorName);
     }
 }
