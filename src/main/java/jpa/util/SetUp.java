@@ -11,16 +11,16 @@ import org.hibernate.Transaction;
 public class SetUp {
 
     private static List<Course> courseList = Arrays.asList(
-            new Course(1, "English", "Anderea Scamaden"),
-            new Course(2, "Mathematics", "Eustace Niemetz"),
-            new Course(3, "Anatomy", "Reynolds Pastor"),
-            new Course(4, "Organic Chemistry", "Odessa Belcher"),
-            new Course(5, "Physics", "Dani Swallow"),
-            new Course(6, "Digital Logic", "Glenden Reilingen"),
-            new Course(7, "Object Oriented Programming", "Giselle Ardy"),
-            new Course(8, "Data Structures", "Carolan Stoller"),
-            new Course(9, "Politics", "Carmita De Maine"),
-            new Course(10, "Art", "Kingsly Doxsey")
+            new Course( "English", "Anderea Scamaden"),
+            new Course( "Mathematics", "Eustace Niemetz"),
+            new Course( "Anatomy", "Reynolds Pastor"),
+            new Course( "Organic Chemistry", "Odessa Belcher"),
+            new Course( "Physics", "Dani Swallow"),
+            new Course( "Digital Logic", "Glenden Reilingen"),
+            new Course( "Object Oriented Programming", "Giselle Ardy"),
+            new Course( "Data Structures", "Carolan Stoller"),
+            new Course( "Politics", "Carmita De Maine"),
+            new Course( "Art", "Kingsly Doxsey")
     );
     private static List<Student> studentList = Arrays.asList(
             new Student("hluckham0@google.ru", "Hazel Luckham", "X1uZcoIh0dj"),
@@ -37,22 +37,27 @@ public class SetUp {
 
     ConnectionFactory connectionFactory = ConnectionFactory.GET_SESSION.getInstance();
 
-    public SetUp(ConnectionFactory connectionFactory) {
-        this.connectionFactory = connectionFactory;
+    public SetUp() {
+
     }
 
     public void setDatabaseSchema(){
       //get a current connection
 //
         //Insert coursedata into course table
+        Session session = connectionFactory.getSession();
         for (Course course: courseList){
-            connectionFactory.getSession().persist(course);
+            Course attachedCourse = (Course) session.merge(course);
+            session.persist(attachedCourse);
         }
 
         //Insert students data into student table
         for (Student student:studentList){
-            connectionFactory.getSession().persist(student);
+           session.getSession().persist(student);
         }
+
+
+        connectionFactory.makeCommit();
 
     }
 }

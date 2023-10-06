@@ -33,7 +33,7 @@ public enum ConnectionFactory {
     }
 
     public void closeSession() {
-
+        t.commit();
         factory.close();
         session.close();
     }

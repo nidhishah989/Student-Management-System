@@ -14,13 +14,10 @@ public class Course {
     private String cInstructorName;
 
     Course(){
-        this.cid=0;
-        this.cName = null;
-        this.cInstructorName=null;
+
     }
 
-    public Course(int cid, String cName, String cInstructorName) {
-        this.cid = cid;
+    public Course(String cName, String cInstructorName) {
         this.cName = cName;
         this.cInstructorName = cInstructorName;
     }

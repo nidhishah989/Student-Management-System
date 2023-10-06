@@ -9,6 +9,7 @@ import jpa.util.ConnectionFactory;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+import java.util.ArrayList;
 import java.util.List;
 
 public class StudentService implements StudentDAO {
@@ -66,15 +67,19 @@ public class StudentService implements StudentDAO {
     public void registerStudentToCourse(String email, int cid) {
       try{
           Course newCourse;
-          List<Course> rgisteredCourses = null;
+//          List<Course> rgisteredCourses;
           //get student registered courses
           Student student = getStudentByEmail(email);
-          rgisteredCourses = student.geteCourses();
+          List<Course> rgisteredCourses = student.geteCourses();
           //check student already register given course or not
-          if(student!=null && !student.geteCourses().isEmpty()){
+          if(student!=null && rgisteredCourses!=null && !rgisteredCourses.isEmpty()){
               for(Course course:student.geteCourses()){
                   if (course.getCid()==cid){throw new Exception("You are already registered in that course!");}
               }
+          }
+
+          else if(rgisteredCourses==null){
+              rgisteredCourses = new ArrayList<>();
           }
           // Register the course for student
           //get course from courseservice
@@ -89,7 +94,7 @@ public class StudentService implements StudentDAO {
           //add course in courselist in student entity
           student.seteCourses(rgisteredCourses);
           connectionfactory.getSession().merge(student);
-          connectionfactory.makeCommit();
+//          connectionfactory.makeCommit();
           //call merge on student
       } catch (NoResultException ne){
           throw new NoResultException("Student is not present");
