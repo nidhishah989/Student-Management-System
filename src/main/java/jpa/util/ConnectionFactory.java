@@ -28,6 +28,7 @@ public enum ConnectionFactory {
         return session;
     }
 
+    public void openTrasaction(){session.beginTransaction();}
     public void makeCommit(){
         t.commit();
     }

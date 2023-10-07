@@ -11,6 +11,7 @@ import org.hibernate.Transaction;
 public class SetUp {
 
     private static List<Course> courseList = Arrays.asList(
+
             new Course( "English", "Anderea Scamaden"),
             new Course( "Mathematics", "Eustace Niemetz"),
             new Course( "Anatomy", "Reynolds Pastor"),
@@ -35,7 +36,7 @@ public class SetUp {
             new Student("cjaulme9@bing.com", "Cahra Jaulme", "FnVklVgC6r6")
     );
 
-    ConnectionFactory connectionFactory = ConnectionFactory.GET_SESSION.getInstance();
+    ConnectionFactory connectionfactory = ConnectionFactory.GET_SESSION.getInstance();
 
     public SetUp() {
 
@@ -45,7 +46,7 @@ public class SetUp {
       //get a current connection
 //
         //Insert coursedata into course table
-        Session session = connectionFactory.getSession();
+        Session session = connectionfactory.getSession();
         for (Course course: courseList){
             Course attachedCourse = (Course) session.merge(course);
             session.persist(attachedCourse);
@@ -57,7 +58,9 @@ public class SetUp {
         }
 
 
-        connectionFactory.makeCommit();
-
+        connectionfactory.makeCommit();
+//        System.out.println("IN SETUP before open: "+session.getTransaction().isActive());
+//        connectionfactory.openTrasaction();
+//        System.out.println("IN SETUP after open: "+session.getTransaction().isActive());
     }
 }

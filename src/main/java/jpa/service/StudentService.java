@@ -5,6 +5,7 @@ import jpa.dao.StudentDAO;
 import jpa.entitymodels.Course;
 import jpa.entitymodels.Student;
 import jpa.util.ConnectionFactory;
+import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import javax.persistence.EntityManager;
@@ -69,33 +70,29 @@ public class StudentService implements StudentDAO {
     public void registerStudentToCourse(String email, int cid) {
         //register course for authenticated user and check if already registered or not
       try{
+          CourseDAO cservice = new CourseService();
+          List<Course> avaialableCourses= cservice.getAllCourses();
+          //get the course from available
+          Course course = avaialableCourses.stream()
+                  .filter(acourse -> acourse.getCid() == cid)
+                  .findFirst()
+                  .orElse(null);
           //get student registered courses
           Student student = getStudentByEmail(email);
           List<Course> rgisteredCourses = student.geteCourses();
+          // now
           //check student already register given course or not
-          if(student!=null && rgisteredCourses!=null && !rgisteredCourses.isEmpty()){
-              for(Course course:student.geteCourses()){
-                  if (course.getCid()==cid){throw new Exception("You are already registered in that course!");}
-              }
+          if(student!=null && !rgisteredCourses.isEmpty() && rgisteredCourses.contains(course)){
+              throw new Exception("You are already registered in that course!");
           }
 
-          else if(rgisteredCourses==null){
-              rgisteredCourses = new ArrayList<>();
+          Session session = connectionfactory.getSession();
+          if(!session.getTransaction().isActive()){
+              connectionfactory.openTrasaction();
           }
-          // Register the course for student
-          //get course from courseservice
-          CourseDAO cservice = new CourseService();
-          List<Course> avaialableCourses= cservice.getAllCourses();
-          for (Course acourse: avaialableCourses ){
-              if(acourse.getCid()==cid){
-                  rgisteredCourses.add(acourse);
-                  break;
-              }
-          }
-          Transaction t = connectionfactory.getSession().beginTransaction();
-          //add course in courselist in student entity
-          student.seteCourses(rgisteredCourses);
-          connectionfactory.getSession().merge(student);
+//          System.out.println(session.getTransaction().isActive());
+          student.geteCourses().add(course);
+          session.merge(student);
           connectionfactory.makeCommit();
           //call merge on student
       } catch (NoResultException ne){

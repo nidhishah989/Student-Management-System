@@ -1,6 +1,7 @@
 package jpa.entitymodels;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 @Entity
 @Table (name="Student")
@@ -13,6 +14,7 @@ public class Student {
         this.sEmail = sEmail;
         this.sName = sName;
         this.sPass = sPass;
+        this.eCourses = new ArrayList<>();
     }
 
     @Id

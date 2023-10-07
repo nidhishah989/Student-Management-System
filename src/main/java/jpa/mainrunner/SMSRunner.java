@@ -10,10 +10,11 @@ import java.util.*;
 public class SMSRunner {
 
     public static void main(String[] args){
-        ConnectionFactory connectionFactory = ConnectionFactory.GET_SESSION.getInstance();
+        ConnectionFactory connectionfactory = ConnectionFactory.GET_SESSION.getInstance();
         boolean quit = false;
         StudentDAO stservice = new StudentService();
         SMSController controller = new SMSController();
+//        System.out.println("IN RUNNER: "+ connectionfactory.getSession().getTransaction().isActive());
         // insert all data
         SetUp setUp = new SetUp();
         List<Student> studentlist= stservice.getAllStudents();
@@ -63,7 +64,7 @@ public class SMSRunner {
                         }
                     break;
                 case 2: // Quit mode
-                        connectionFactory.closeSession();
+                        connectionfactory.closeSession();
                         quit=true;
                     break;
             }
